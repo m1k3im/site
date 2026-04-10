@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Платформа подписок</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Навигация -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <i class="fas fa-star"></i>
+                <span>MyCreatorHub</span>
+            </div>
+            <div class="nav-menu">
+                <a href="#" class="nav-link" data-page="home">Главная</a>
+                <a href="#" class="nav-link" data-page="posts">Посты</a>
+                <a href="#" class="nav-link" data-page="subscriptions">Подписки</a>
+                <button id="loginBtn" class="btn btn-primary">Войти</button>
+                <button id="logoutBtn" class="btn btn-secondary" style="display: none;">Выйти</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Главная страница -->
+    <div id="homePage" class="page active">
+        <section class="hero">
+            <div class="container">
+                <h1>Добро пожаловать!</h1>
+                <p>Поддержите меня и получите эксклюзивный контент</p>
+                <a href="#" class="btn btn-large btn-primary" data-page="subscriptions">Выбрать подписку</a>
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="container">
+                <h2>Что вы получите</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <i class="fas fa-image"></i>
+                        <h3>Эксклюзивный контент</h3>
+                        <p>Доступ к уникальным материалам</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-crown"></i>
+                        <h3>Разные уровни</h3>
+                        <p>Выберите подходящий тариф</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-poll"></i>
+                        <h3>Голосования</h3>
+                        <p>Влияйте на будущий контент</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-comments"></i>
+                        <h3>Сообщество</h3>
+                        <p>Общайтесь с другими подписчиками</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Страница подписок -->
+    <div id="subscriptionsPage" class="page">
+        <div class="container">
+            <h1>Выберите уровень подписки</h1>
+            <div id="subscriptionTiers" class="subscription-grid"></div>
+        </div>
+    </div>
+
+    <!-- Страница постов -->
+    <div id="postsPage" class="page">
+        <div class="container">
+            <h1>Посты</h1>
+            <div id="postsContainer" class="posts-container"></div>
+        </div>
+    </div>
+
+    <!-- Панель администратора -->
+    <div id="adminPanel" class="admin-panel" style="display: none;">
+        <div class="admin-sidebar">
+            <h2><i class="fas fa-cog"></i> Панель креатора</h2>
+            <nav class="admin-nav">
+                <a href="#" class="admin-nav-link active" data-section="create-post">
+                    <i class="fas fa-plus"></i> Создать пост
+                </a>
+                <a href="#" class="admin-nav-link" data-section="manage-tiers">
+                    <i class="fas fa-layer-group"></i> Управление уровнями
+                </a>
+                <a href="#" class="admin-nav-link" data-section="create-poll">
+                    <i class="fas fa-poll"></i> Создать опрос
+                </a>
+                <a href="#" class="admin-nav-link" data-section="analytics">
+                    <i class="fas fa-chart-line"></i> Аналитика
+                </a>
+            </nav>
+            <button id="closeAdminPanel" class="btn btn-secondary">
+                <i class="fas fa-times"></i> Закрыть панель
+            </button>
+        </div>
+
+        <div class="admin-content">
+            <!-- Создание поста -->
+            <div id="createPostSection" class="admin-section active">
+                <h2>Создать новый пост</h2>
+                <form id="createPostForm">
+                    <div class="form-group">
+                        <label>Заголовок</label>
+                        <input type="text" id="postTitle" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Содержание</label>
+                        <textarea id="postContent" class="form-control" rows="6" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Изображение (URL)</label>
+                        <input type="url" id="postImage" class="form-control" placeholder="https://example.com/image.jpg">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Тип поста</label>
+                        <select id="postType" class="form-control">
+                            <option value="regular">Обычный пост</option>
+                            <option value="poll">Опрос</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Доступ для уровня</label>
+                        <select id="postTier" class="form-control" required>
+                            <option value="free">Бесплатно</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i> Опубликовать
+                    </button>
+                </form>
+            </div>
+
+            <!-- Управление уровнями подписок -->
+            <div id="manageTiersSection" class="admin-section">
+                <h2>Управление уровнями подписок</h2>
+                
+                <div class="tier-list" id="tierList"></div>
+
+                <h3>Создать новый уровень</h3>
+                <form id="createTierForm">
+                    <div class="form-group">
+                        <label>Название уровня</label>
+                        <input type="text" id="tierName" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Цена (₽/месяц)</label>
+                        <input type="number" id="tierPrice" class="form-control" min="0" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Описание</label>
+                        <textarea id="tierDescription" class="form-control" rows="3" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Цвет</label>
+                        <input type="color" id="tierColor" class="form-control" value="#6366f1">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Иконка (Font Awesome)</label>
+                        <input type="text" id="tierIcon" class="form-control" placeholder="fas fa-star" value="fas fa-star">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Преимущества (через запятую)</label>
+                        <textarea id="tierBenefits" class="form-control" rows="2" placeholder="Доступ к постам, Эксклюзивный контент"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Создать уровень
+                    </button>
+                </form>
+            </div>
+
+            <!-- Создание опроса -->
+            <div id="createPollSection" class="admin-section">
+                <h2>Создать опрос</h2>
+                <form id="createPollForm">
+                    <div class="form-group">
+                        <label>Вопрос</label>
+                        <input type="text" id="pollQuestion" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Варианты ответов</label>
+                        <div id="pollOptions">
+                            <input type="text" class="form-control poll-option" placeholder="Вариант 1" required>
+                            <input type="text" class="form-control poll-option" placeholder="Вариант 2" required>
+                        </div>
+                        <button type="button" id="addPollOption" class="btn btn-secondary mt-2">
+                            <i class="fas fa-plus"></i> Добавить вариант
+                        </button>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Доступ для уровня</label>
+                        <select id="pollTier" class="form-control" required>
+                            <option value="free">Бесплатно</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-poll"></i> Создать опрос
+                    </button>
+                </form>
+            </div>
+
+            <!-- Аналитика -->
+            <div id="analyticsSection" class="admin-section">
+                <h2>Аналитика</h2>
+                <div class="analytics-grid">
+                    <div class="analytics-card">
+                        <i class="fas fa-users"></i>
+                        <h3 id="totalSubscribers">0</h3>
+                        <p>Подписчиков</p>
+                    </div>
+                    <div class="analytics-card">
+                        <i class="fas fa-file-alt"></i>
+                        <h3 id="totalPosts">0</h3>
+                        <p>Постов</p>
+                    </div>
+                    <div class="analytics-card">
+                        <i class="fas fa-poll"></i>
+                        <h3 id="totalPolls">0</h3>
+                        <p>Опросов</p>
+                    </div>
+                    <div class="analytics-card">
+                        <i class="fas fa-ruble-sign"></i>
+                        <h3 id="totalRevenue">0</h3>
+                        <p>Доход (₽/мес)</p>
+                    </div>
+                </div>
+
+                <h3>Подписчики по уровням</h3>
+                <div id="subscribersByTier" class="subscribers-breakdown"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно входа -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Вход</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Email или логин</label>
+                    <input type="text" id="loginEmail" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Пароль</label>
+                    <input type="password" id="loginPassword" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Войти</button>
+                <p class="modal-hint">Для демо используйте: admin / admin (креатор) или user / user (подписчик)</p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Модальное окно подписки -->
+    <div id="subscriptionModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Оформление подписки</h2>
+            <div id="selectedTierInfo"></div>
+            <form id="subscriptionForm">
+                <div class="form-group">
+                    <label>Способ оплаты</label>
+                    <select class="form-control">
+                        <option>Банковская карта</option>
+                        <option>PayPal</option>
+                        <option>Криптовалюта</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Оформить подписку</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Кнопка админ-панели для креатора -->
+    <button id="openAdminPanel" class="floating-admin-btn" style="display: none;">
+        <i class="fas fa-cog"></i>
+    </button>
+
+    <script src="script.js"></script>
+</body>
+</html>
